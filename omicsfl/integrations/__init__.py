@@ -1,0 +1,1 @@
+"""Optional framework integration adapters."""

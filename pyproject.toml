@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "omicsfl"
+version = "0.1.0"
+description = "Download, preprocess, and partition TCGA transcriptomics data for federated learning experiments."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    {name = "Brian Mueller", email = "briamueller9@gmail.com"},
+]
+keywords = ["federated-learning", "TCGA", "genomics", "RNA-seq", "bioinformatics"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+
+dependencies = [
+    "numpy>=1.22",
+    "pandas>=1.4",
+    "pyarrow>=8.0",
+]
+
+[project.optional-dependencies]
+xena = ["xenaPython>=1.0"]
+gdc = []  # Uses only stdlib urllib
+flower = ["flwr>=1.5"]
+fedml = ["fedml"]
+torch = ["torch>=1.12"]
+all = ["xenaPython>=1.0", "flwr>=1.5", "torch>=1.12"]
+dev = ["pytest>=7.0", "pytest-cov"]
+
+[project.scripts]
+omicsfl = "omicsfl.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/brimueller/OmicsFL"
+Repository = "https://github.com/brimueller/OmicsFL"
+
+[tool.hatch.build.targets.wheel]
+packages = ["omicsfl"]
