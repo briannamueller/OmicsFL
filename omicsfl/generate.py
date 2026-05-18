@@ -44,7 +44,7 @@ def generate(
     cohorts = validate_cohorts(cohorts)
 
     # Validate task
-    valid_tasks = ["cancer_type", "stage", "gender", "survival"]
+    valid_tasks = ["cancer_type", "stage", "gender"]
     if task not in valid_tasks:
         raise ValueError(f"Unknown task: '{task}'. Choose from {valid_tasks}")
 
@@ -269,11 +269,6 @@ def _encode_labels(expression, phenotype, cohorts, task):
         labels, class_map = encode_gender(genders)
         valid_mask = pd.Series(~np.isnan(labels), index=expression.index)
 
-    elif task == "survival":
-        raise NotImplementedError(
-            "Survival task requires days_to_death and vital_status columns. "
-            "Coming in a future release."
-        )
     else:
         raise ValueError(f"Unknown task: {task}")
 
