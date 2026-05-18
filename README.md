@@ -64,12 +64,12 @@ omicsfl generate --source gdc ...    # Raw counts, more samples
 
 ### Classification Tasks
 
-| Task | Classes | Description |
-|------|---------|-------------|
-| `cancer_type` | 2–33 | Multi-class cancer type (requires 2+ cohorts) |
-| `stage` | 2 | Binary: advanced (Stage IV) vs non-advanced |
-| `gender` | 2 | Binary: male vs female |
-| `survival` | 2 | Binary: survived 3yr+ vs deceased (coming soon) |
+| Task | Type | Description |
+|------|------|-------------|
+| `cancer_type` | Multi-class | Cancer type classification (requires 2+ cohorts) |
+| `stage` | Binary | Advanced (Stage IV) vs non-advanced |
+| `gender` | Binary | Male vs female (useful as a sanity check) |
+| `survival` | Binary | Survived 3yr+ vs deceased |
 
 ### Partition Strategies
 
@@ -186,7 +186,7 @@ omicsfl info
 ### From source
 
 ```bash
-git clone https://github.com/brimueller/OmicsFL.git
+git clone https://github.com/brinnamueller/OmicsFL.git
 cd OmicsFL
 pip install -e .
 ```
