@@ -68,6 +68,7 @@ omicsfl generate --source gdc ...    # Raw counts, more samples
 |------|------|-------------|
 | `cancer_type` | Multi-class | Cancer type classification (requires 2+ cohorts) |
 | `stage` | Binary | Advanced (Stage IV) vs non-advanced |
+| `survival` | Binary | Survived past threshold vs deceased (default: 3 years, Xena only) |
 
 ### Partition Strategies
 

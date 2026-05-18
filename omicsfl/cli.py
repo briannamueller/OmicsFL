@@ -20,7 +20,7 @@ def main():
     gen.add_argument("--cohorts", type=str, default="all",
                      help="Comma-separated cohort names, or 'all' (default: all)")
     gen.add_argument("--task", type=str, default="cancer_type",
-                     choices=["cancer_type", "stage"],
+                     choices=["cancer_type", "stage", "survival"],
                      help="Classification task (default: cancer_type)")
     gen.add_argument("--source", type=str, default="xena",
                      choices=["xena", "gdc"],
@@ -46,6 +46,8 @@ def main():
                      help="Number of clients for artificial partitions (default: 10)")
     gen.add_argument("--alpha", type=float, default=0.5,
                      help="Dirichlet concentration (default: 0.5)")
+    gen.add_argument("--survival-threshold-days", type=int, default=365 * 3,
+                     help="Survival cutoff in days (default: 1095 = 3 years)")
     gen.add_argument("--classes-per-client", type=int, default=2,
                      help="Classes per client for pathological (default: 2)")
 
@@ -96,6 +98,7 @@ def _cmd_generate(args):
         seed=args.seed,
         output_dir=args.output_dir,
         cache_dir=args.cache_dir,
+        survival_threshold_days=args.survival_threshold_days,
         num_clients=args.num_clients,
         alpha=args.alpha,
         classes_per_client=args.classes_per_client,
@@ -136,6 +139,7 @@ def _cmd_info():
     print("=" * 50)
     print("  cancer_type  — Multi-class cancer type (requires 2+ cohorts)")
     print("  stage        — Binary: advanced vs non-advanced")
+    print("  survival     — Binary: survived past threshold vs deceased (Xena only)")
     print()
     print("Partition Strategies")
     print("=" * 50)

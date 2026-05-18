@@ -25,6 +25,7 @@ def generate(
     output_dir: str | Path | None = None,
     cache_dir: str | Path | None = None,
     # Dirichlet/pathological params
+    survival_threshold_days: int = 365 * 3,
     num_clients: int = 10,
     alpha: float = 0.5,
     classes_per_client: int = 2,
@@ -44,7 +45,7 @@ def generate(
     cohorts = validate_cohorts(cohorts)
 
     # Validate task
-    valid_tasks = ["cancer_type", "stage"]
+    valid_tasks = ["cancer_type", "stage", "survival"]
     if task not in valid_tasks:
         raise ValueError(f"Unknown task: '{task}'. Choose from {valid_tasks}")
 
@@ -99,6 +100,8 @@ def generate(
     print(f"\n[2/5] Encoding labels (task={task}) ...")
     labels, class_map, valid_mask = _encode_labels(
         expression, phenotype, cohorts, task,
+        source=source, cache_dir=cache_dir,
+        survival_threshold_days=survival_threshold_days,
     )
     expression = expression.loc[valid_mask]
     labels = labels[valid_mask.values]
@@ -235,9 +238,9 @@ def _download(
     return expression, phenotype
 
 
-def _encode_labels(expression, phenotype, cohorts, task):
+def _encode_labels(expression, phenotype, cohorts, task, **kwargs):
     from omicsfl.preprocess.labels import (
-        encode_cancer_type, encode_stage, encode_gender, encode_survival,
+        encode_cancer_type, encode_stage, encode_survival,
     )
 
     sample_ids = expression.index.tolist()
@@ -260,6 +263,31 @@ def _encode_labels(expression, phenotype, cohorts, task):
             raise ValueError("Phenotype data missing 'stage' column for stage task.")
         stages = phenotype["stage"].reindex(expression.index)
         labels, class_map = encode_stage(stages)
+        valid_mask = pd.Series(~np.isnan(labels), index=expression.index)
+
+    elif task == "survival":
+        source = kwargs.get("source", "xena")
+        cache_dir = kwargs.get("cache_dir")
+        threshold = kwargs.get("survival_threshold_days", 365 * 3)
+
+        if source == "gdc":
+            raise ValueError(
+                "Survival task is only supported with source='xena'. "
+                "GDC clinical download does not include survival endpoints."
+            )
+
+        survival_path = Path(cache_dir) / "TCGA_survival_data.tsv"
+        if not survival_path.exists():
+            raise FileNotFoundError(f"Survival data not found at {survival_path}")
+
+        surv = pd.read_csv(survival_path, sep="\t", index_col="sample")
+        surv = surv.reindex(expression.index)
+
+        # OS=1 means dead, OS=0 means alive/censored
+        vital_status = surv["OS"].map({1: "Dead", 0: "Alive"})
+        days = surv["OS.time"]
+
+        labels, class_map = encode_survival(days, vital_status, threshold)
         valid_mask = pd.Series(~np.isnan(labels), index=expression.index)
 
     else:
