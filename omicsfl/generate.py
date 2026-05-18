@@ -44,7 +44,7 @@ def generate(
     cohorts = validate_cohorts(cohorts)
 
     # Validate task
-    valid_tasks = ["cancer_type", "stage", "gender"]
+    valid_tasks = ["cancer_type", "stage"]
     if task not in valid_tasks:
         raise ValueError(f"Unknown task: '{task}'. Choose from {valid_tasks}")
 
@@ -260,13 +260,6 @@ def _encode_labels(expression, phenotype, cohorts, task):
             raise ValueError("Phenotype data missing 'stage' column for stage task.")
         stages = phenotype["stage"].reindex(expression.index)
         labels, class_map = encode_stage(stages)
-        valid_mask = pd.Series(~np.isnan(labels), index=expression.index)
-
-    elif task == "gender":
-        if "gender" not in phenotype.columns:
-            raise ValueError("Phenotype data missing 'gender' column.")
-        genders = phenotype["gender"].reindex(expression.index)
-        labels, class_map = encode_gender(genders)
         valid_mask = pd.Series(~np.isnan(labels), index=expression.index)
 
     else:

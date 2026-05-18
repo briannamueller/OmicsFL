@@ -68,7 +68,6 @@ omicsfl generate --source gdc ...    # Raw counts, more samples
 |------|------|-------------|
 | `cancer_type` | Multi-class | Cancer type classification (requires 2+ cohorts) |
 | `stage` | Binary | Advanced (Stage IV) vs non-advanced |
-| `gender` | Binary | Male vs female (useful as a sanity check) |
 
 ### Partition Strategies
 

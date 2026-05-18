@@ -20,7 +20,7 @@ def main():
     gen.add_argument("--cohorts", type=str, default="all",
                      help="Comma-separated cohort names, or 'all' (default: all)")
     gen.add_argument("--task", type=str, default="cancer_type",
-                     choices=["cancer_type", "stage", "gender"],
+                     choices=["cancer_type", "stage"],
                      help="Classification task (default: cancer_type)")
     gen.add_argument("--source", type=str, default="xena",
                      choices=["xena", "gdc"],
@@ -136,7 +136,6 @@ def _cmd_info():
     print("=" * 50)
     print("  cancer_type  — Multi-class cancer type (requires 2+ cohorts)")
     print("  stage        — Binary: advanced vs non-advanced")
-    print("  gender       — Binary: male vs female")
     print()
     print("Partition Strategies")
     print("=" * 50)
