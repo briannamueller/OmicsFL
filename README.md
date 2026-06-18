@@ -20,7 +20,7 @@ Federated learning benchmarks typically use vision/NLP datasets with artificial 
 ## Quick Start
 
 ```bash
-pip install omicsfl
+pip install git+https://github.com/briannamueller/OmicsFL.git
 ```
 
 ### One command
@@ -112,7 +112,7 @@ OmicsFL outputs are framework-agnostic (NumPy arrays), but optional adapters mak
 ### Flower
 
 ```bash
-pip install omicsfl[flower]
+pip install "omicsfl[flower] @ git+https://github.com/briannamueller/OmicsFL.git"
 ```
 
 ```python
@@ -125,7 +125,7 @@ data = get_numpy_data("./omicsfl_data/f3f4811ed1a6/")
 ### PFLlib
 
 ```bash
-pip install omicsfl[torch]
+pip install "omicsfl[torch] @ git+https://github.com/briannamueller/OmicsFL.git"
 ```
 
 ```python
@@ -182,21 +182,30 @@ omicsfl info
 
 ## Installation
 
-### From source
+### Recommended (install directly from GitHub)
 
 ```bash
-git clone https://github.com/brinnamueller/OmicsFL.git
-cd OmicsFL
-pip install -e .
+pip install git+https://github.com/briannamueller/OmicsFL.git
 ```
 
-### Optional dependencies
+### Optional extras
+
+Extras require quoted `"pkg @ url"` syntax — without quotes, the shell expands
+`[...]` as a glob and the space in `@ url` splits the argument:
 
 ```bash
-pip install omicsfl[xena]    # Xena download backend (xenaPython)
-pip install omicsfl[torch]   # PyTorch DataLoaders for integrations
-pip install omicsfl[flower]  # Flower FL framework adapter
-pip install omicsfl[all]     # Everything
+pip install "omicsfl[xena] @ git+https://github.com/briannamueller/OmicsFL.git"    # Xena download backend (xenaPython)
+pip install "omicsfl[torch] @ git+https://github.com/briannamueller/OmicsFL.git"   # PyTorch DataLoaders for integrations
+pip install "omicsfl[flower] @ git+https://github.com/briannamueller/OmicsFL.git"  # Flower FL framework adapter
+pip install "omicsfl[all] @ git+https://github.com/briannamueller/OmicsFL.git"     # Everything
+```
+
+### From source (development)
+
+```bash
+git clone https://github.com/briannamueller/OmicsFL.git
+cd OmicsFL
+pip install -e .
 ```
 
 ### Core dependencies (minimal)
